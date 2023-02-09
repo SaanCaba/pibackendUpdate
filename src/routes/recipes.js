@@ -30,7 +30,7 @@ router.get('/:idReceta', async (req,res)=> {
             // este id es creado por post. y tiene el id de UUID.
             let dbInfo = await getDb();
     
-            let filterId = dbInfo.filter(e => e.id === idReceta)
+            let filterId = dbInfo.filter(e => e.id === idReceta || e._id === idReceta)
     
             return res.json(filterId)
     
