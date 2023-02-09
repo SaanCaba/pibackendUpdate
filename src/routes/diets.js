@@ -17,7 +17,10 @@ router.get("/", async (req, res) => {
     ];
 
     try {
-
+      const dbDietsTest = await Diet.find({})
+      if(dbDietsTest.length > 1){
+        return;
+      }
     apiDiets.map(async (d)=> {
         await new Diet({
           name: d
