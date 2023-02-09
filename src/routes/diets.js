@@ -18,6 +18,7 @@ router.get("/", async (req, res) => {
 
     try {
       const dbDietsTest = await Diet.find({})
+      console.log(dbDietsTest)
       if(dbDietsTest.length > 1){
         return res.json(dbDietsTest);
       }

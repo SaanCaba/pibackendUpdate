@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {getApi, getAllinfo} = require('./utils.js')
+const {getApi, getAllinfo, getDb} = require('./utils.js')
 const { default: axios } = require('axios');
 const Recipe = require('../models/recipe.model.js');
 const { v4: uuidv4 } = require('uuid');
@@ -29,38 +29,17 @@ router.get('/:idReceta', async (req,res)=> {
         if(idReceta.length > 7){
             // este id es creado por post. y tiene el id de UUID.
             let dbInfo = await getDb();
-    
             let filterId = dbInfo.filter(e => e.id === idReceta || e._id === idReceta)
     
             return res.json(filterId)
     
         }
           let realId = Number(idReceta)
-        // si no esta en db, lo voy a buscar a esta url por id.
-        let allInfo = await axios.get(`https://api.spoonacular.com/recipes/${realId}/information?apiKey=${API_KEY}`);
-        // 'https://run.mocky.io/v3/84b3f19c-7642-4552-b69c-c53742badee5'
-        let arr = [] // meto allInfo enn un array para poder trabajarlo mejor
-        arr.push(allInfo.data)
-        let response = arr.map(e => {
-        return {
-        id: e.id,
-        vegetarian : e.vegetarian,
-        title : e.title,
-        diets: e.diets.map(e => {return {name: e}}),
-        image: e.image,
-        dishTypes: e.dishTypes.map(e => {return{name: e}}),
-        healthScore: e.healthScore,
-        summary: e.summary,
-        steps: e.analyzedInstructions[0] && e.analyzedInstructions[0].steps?.map(e => e.step).join('')
-            }
-        })
-        // // con MOCK API.
-        // let allInfo = await getAllinfo()
-        // let filtrado = allInfo.filter(e => e.id === realId)
-        // res.json(filtrado)
-        res.json(response)
+        let allInfo = await getAllinfo()
+        let filtrado = allInfo.filter(e => e.id === realId)
+        res.json(filtrado)
     }catch(error) {
-
+        console.log(error)
 
         res.status(404).json({err: error})
 

@@ -13,10 +13,11 @@ server.name = 'API';
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
-const whiteList = ['https://demo-front-foodapp.vercel.app']
+const local = 'http://localhost:3000';
+const whiteList = ['https://demo-front-foodapp.vercel.app', 'http://localhost:3000']
 const options = {
   origin: (origin, callback) => {
-    if(whiteList.includes(origin)){
+    if(whiteList.includes(origin) || whiteList.includes(local)){
       callback(null, true);
   }else{
     callback(new Error('no permitido!'));
